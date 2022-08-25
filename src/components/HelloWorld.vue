@@ -1,41 +1,37 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa" target="_blank" rel="noopener">pwa</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="Login">
+    <div class="dv_welcome">
+      <el-tabs type="border-card" class="demo-tabs" stretch="true">
+        <el-tab-pane>
+          <template #label>
+            <span class="custom-tabs-label">
+              <span>短信登录</span>
+            </span>
+          </template>
+          <!-- 短信登录-->
+          <message-login/>
+        </el-tab-pane>
+        <el-tab-pane label="账号登录">
+          <div>
+            账号登录
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="扫码登录">
+          <div>
+            扫码登录
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
+import MessageLogin from "@/views/Login/messageLogin.vue";
 
 @Options({
+  components: {MessageLogin},
   props: {
     msg: String
   }
@@ -43,22 +39,35 @@ import { Options, Vue } from 'vue-class-component';
 export default class HelloWorld extends Vue {
   msg!: string
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+* {
+  border: red 1px solid;
+  border-radius: 10%;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.Login {
+  width: 300pt;
+  height: 300pt;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+
 }
-a {
-  color: #42b983;
+
+.demo-tabs .custom-tabs-label .el-icon {
+  vertical-align: middle;
+}
+
+.demo-tabs .custom-tabs-label span {
+  vertical-align: middle;
+  margin-left: 4px;
 }
 </style>
