@@ -1,7 +1,7 @@
 <template>
   <div class="Login">
     <div class="dv_welcome">
-      <el-tabs type="border-card" class="demo-tabs" stretch="true">
+      <el-tabs type="card" class="demo-tabs" stretch="true">
         <el-tab-pane>
           <template #label>
             <span class="custom-tabs-label">
@@ -13,12 +13,12 @@
         </el-tab-pane>
         <el-tab-pane label="账号登录">
           <div>
-            账号登录
+            <usernameLogin />
           </div>
         </el-tab-pane>
         <el-tab-pane label="扫码登录">
           <div>
-            扫码登录
+            <QRlogin />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -29,9 +29,15 @@
 <script lang="ts">
 import {Options, Vue} from 'vue-class-component';
 import MessageLogin from "@/views/Login/messageLogin.vue";
+import usernameLogin from "@/views/Login/usernameLogin.vue";
+import QRlogin from "@/views/Login/QRcodeLogin.vue";
 
 @Options({
-  components: {MessageLogin},
+  components: {
+    MessageLogin,
+    usernameLogin,
+    QRlogin
+  },
   props: {
     msg: String
   }
@@ -46,12 +52,17 @@ export default class HelloWorld extends Vue {
 <style scoped lang="scss">
 * {
   border: red 1px solid;
-  border-radius: 10%;
+}
+div{
+  font-size: 30px;
+
 }
 
 .Login {
   width: 300pt;
-  height: 300pt;
+  position: absolute;
+  right: 10%;
+  bottom: 25%;
 }
 
 .demo-tabs > .el-tabs__content {

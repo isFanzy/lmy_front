@@ -16,8 +16,6 @@ let autoLogin = ref('0')
 const notice = ref('0')
 const ifAuto = function () {
   console.log("11111");
-
-
 }
 </script>
 
