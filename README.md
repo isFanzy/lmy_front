@@ -1,6 +1,9 @@
 # fanzy_cloud
- > aFan云盘前端
-
+> aFan云盘前端 
+> https://xcafrhn32d.feishu.cn/wiki/wikcnYyCKqWcHt7V7yquKYkfD0b
+> 
+> 
+> 
 ## Project setup
 ```
 npm install
