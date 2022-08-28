@@ -1,6 +1,6 @@
 <template>
   <div class="Login">
-    <div class="dv_welcome">
+    <div class="dv_welcome" style="width: 400px;height: 500px">
       <el-tabs type="card" class="demo-tabs" stretch="true">
         <el-tab-pane>
           <template #label>
@@ -55,7 +55,6 @@ export default class HelloWorld extends Vue {
 }
 div{
   font-size: 30px;
-
 }
 
 .Login {
