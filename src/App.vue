@@ -10,6 +10,10 @@ body,
   margin: 0;
   padding: 0;
 }
-
-
 </style>
+
+<script lang="ts" setup>
+import axios from "axios";
+axios.defaults.withCredentials = true
+
+</script>

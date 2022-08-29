@@ -13,10 +13,10 @@
         </el-main>
         <el-footer>
           <Footer/>
+          <el-button @click="testAxios">testAxios</el-button>
         </el-footer>
       </el-container>
     </el-container>
-    <el-button @click="testAxios">testAxios</el-button>
   </div>
 </template>
 
@@ -25,10 +25,13 @@ import Aside from "@/views/Home/Aside.vue";
 import Header from "@/views/Home/Header.vue";
 import Main from "@/views/Home/Main.vue";
 import Footer from "@/views/Home/Footer.vue";
-import request from "@/Plugins/axiosInstance";
+import aixos from "@/Plugins/axiosInstance";
+import { getCurrentInstance } from "vue";
+
+const { proxy } = getCurrentInstance();
 
 const testAxios = function () {
-  request.get('www.baidu.com').then(res => {
+  proxy.$axios.get('/api/user').then(res => {
     console.log(res.data)
   })
 }
