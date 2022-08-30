@@ -45,6 +45,9 @@
           </el-icon>
           <span>收藏夹</span>
         </el-menu-item>
+        <el-menu-item index="5">
+          <span>传输</span>
+        </el-menu-item>
       </el-menu>
     </el-col>
 

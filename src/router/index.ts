@@ -4,12 +4,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'loginView',
-    component: () => import('../components/HelloWorld.vue')
+    component: () => import('../components/PC/HelloWorld.vue')
   },
   {
     path: '/homeView',
     name: 'homeView',
-    component: () => import('../components/Home.vue')
+    component: () => import('../components/PC/fileSystem.vue')
+  },
+  {
+    path: '/upload',
+    name: 'upload',
+    component: () => import('../components/PC/upLoad.vue')
   }
 ]
 

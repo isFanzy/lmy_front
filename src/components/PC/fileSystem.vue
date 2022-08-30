@@ -19,13 +19,12 @@
             <Header/>
           </el-header>
           <el-main>
-            <div class="main" v-contextmenu:contextmenu>
+            <div class="main" v-contextmenu:contextmenu style="height: 90%">
               <Main />
             </div>
           </el-main>
           <el-footer>
             <Footer/>
-            <el-button @click="testAxios">testAxios</el-button>
           </el-footer>
         </el-container>
       </el-container>
@@ -49,7 +48,7 @@ const testAxios = function () {
 
 <style scoped>
 * {
-  border: 1px red solid;
+  /*border: 1px red solid;*/
 }
 
 body {
