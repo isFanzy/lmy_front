@@ -1,23 +1,35 @@
 <template>
-  <div class="common-layout" style="height: 100%;width: 100%">
-    <el-container style="height: 100%;width: 100%">
-      <el-aside style="height: 100%;">
-        <Aside/>
-      </el-aside>
-      <el-container>
-        <el-header>
-          <Header/>
-        </el-header>
-        <el-main>
-          <Main/>
-        </el-main>
-        <el-footer>
-          <Footer/>
-          <el-button @click="testAxios">testAxios</el-button>
-        </el-footer>
+  <v-contextmenu ref="contextmenu">
+    <v-contextmenu-item>下载</v-contextmenu-item>
+    <v-contextmenu-item>分享</v-contextmenu-item>
+    <v-contextmenu-item>收藏</v-contextmenu-item>
+    <v-contextmenu-item>重命名</v-contextmenu-item>
+    <v-contextmenu-item>移动</v-contextmenu-item>
+    <v-contextmenu-item>查看详细信息</v-contextmenu-item>
+    <v-contextmenu-item>放入回收站</v-contextmenu-item>
+
+  </v-contextmenu>
+    <div class="common-layout" style="height: 100%;width: 100%">
+      <el-container style="height: 100%;width: 100%">
+        <el-aside style="height: 100%;">
+          <Aside/>
+        </el-aside>
+        <el-container>
+          <el-header>
+            <Header/>
+          </el-header>
+          <el-main>
+            <div class="main" v-contextmenu:contextmenu>
+              <Main />
+            </div>
+          </el-main>
+          <el-footer>
+            <Footer/>
+            <el-button @click="testAxios">testAxios</el-button>
+          </el-footer>
+        </el-container>
       </el-container>
-    </el-container>
-  </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -25,15 +37,12 @@ import Aside from "@/views/Home/Aside.vue";
 import Header from "@/views/Home/Header.vue";
 import Main from "@/views/Home/Main.vue";
 import Footer from "@/views/Home/Footer.vue";
-import aixos from "@/Plugins/axiosInstance";
 import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 
 const testAxios = function () {
-  proxy.$axios.get('/api/user').then(res => {
-    console.log(res.data)
-  })
+
 }
 
 </script>
