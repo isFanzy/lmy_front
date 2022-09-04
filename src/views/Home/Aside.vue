@@ -43,11 +43,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useBucketsStore } from "@/Pinia/store/bucket";
 import {getCurrentInstance, onMounted, ref} from "vue";
 import request from "@/Utils/axiosInstance";
 import {Logger} from "sass";
-
 const {proxy} = getCurrentInstance();
+const currentBucket = useBucketsStore();
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -88,7 +89,6 @@ const buckets = ref([]);
 
 onMounted(() => {
   console.log("============HOOK============")
-
   proxy.$axios.get('/api/bucket').then((res) => {
     if (res.data.code != 200) {
       console.log("未找到桶")

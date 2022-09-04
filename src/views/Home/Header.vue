@@ -22,11 +22,14 @@
 <script lang="ts" setup>
 import {ElMessage, ElMessageBox} from "element-plus";
 import {getCurrentInstance, onMounted, ref} from "vue";
-
+import { useBucketsStore } from "@/Pinia/store/bucket";
+import {storeToRefs} from "pinia";
+const currentBucket = useBucketsStore();
 const {proxy} = getCurrentInstance();
 const searchFor = ref("");
 const localIP = ref("");
 const fileLocate = ref("");
+const { path } = storeToRefs(currentBucket)
 /*
 * 文件上传
 * */
@@ -75,7 +78,9 @@ const createBucket = function () {
     if (res.data.code != 200) {
       ElMessage.error(res.data.data)
     } else {
-      ElMessage.success(res.data.data)
+      //操作成功
+      currentBucket.path = fileLocate.value;
+      ElMessage.success(res.data.data);
     }
   })
 }

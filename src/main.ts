@@ -5,15 +5,15 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
-import store from './store'
 import contextmenu from "v-contextmenu";
 import "v-contextmenu/dist/themes/default.css";
 import Axios from "axios";
 import axios from "axios";
-import 'lib-flexible'
+import { createPinia } from 'pinia'
 const app = createApp(App);
+const pinia  = createPinia();
 // @ts-ignore
-app.use(store).use(ElementPlus).use(router).use(contextmenu).mount('#app')
+app.use(ElementPlus).use(router).use(contextmenu).use(pinia).mount('#app')
 app.config.globalProperties.$axios = axios;
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
