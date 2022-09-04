@@ -8,21 +8,9 @@
           v-model="searchFor"
           class="w-50 m-2"
           size="large"
-          placeholder="文件地址"
+          placeholder="搜索文件"
       />
-
-      <!--  打开文件夹   -->
-      <el-upload
-          ref="upload"
-          class="upload-demo"
-          action="#"
-          :on-exceed="handleExceed"
-          :auto-upload="false"
-          :show-file-list="false"
-          :multiple="true"
-      >
-        <el-button icon="el-icon-plus" @click="uploadFile"/>
-      </el-upload>
+      <el-button icon="el-icon-plus" @click="uploadFile"/>
       <!--   搜索  -->
       <el-button icon="el-icon-search" @click="search"/>
 
@@ -33,10 +21,24 @@
 
 <script lang="ts" setup>
 import {ElMessage, ElMessageBox} from "element-plus";
-import {getCurrentInstance, ref} from "vue";
+import {getCurrentInstance, onMounted, ref} from "vue";
 
 const {proxy} = getCurrentInstance();
-const searchFor = ref('C:\\Users\\Administrator');
+const searchFor = ref("");
+const localIP = ref("");
+const fileLocate = ref("");
+/*
+* 文件上传
+* */
+// 获取ip
+onMounted(() => {
+  proxy.$axios.post('/getIPapi/json/?lang=zh-CN').then(res => {
+    localIP.value = res.data.query;
+    console.log("=======本地IP1========" + localIP.value);
+  })
+})
+
+
 const search = function () {
   ElMessageBox.prompt('', '搜索文件', {
     confirmButtonText: 'OK',
@@ -55,11 +57,54 @@ const search = function () {
         })
       })
 }
-const uploadFile = function () {
+
+//发送创建桶请求
+const createBucket = function () {
+  proxy.$axios({
+    method: 'post',
+    url: '/api/bucket',
+    params: {
+      "bucketId": "",
+      "whiteIpList": localIP.value,
+      "password": "",
+      "path": fileLocate.value
+    }
+  }).then(res => {
+    console.log(res.data)
+    // 操作失败
+    if (res.data.code != 200) {
+      ElMessage.error(res.data.data)
+    } else {
+      ElMessage.success(res.data.data)
+    }
+  })
 }
-/*
-* 文件上传
-* */
+const uploadFile = function () {
+  ElMessageBox.prompt('请输入本地库地址', '绑定本地库', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    // inputPattern:
+    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+    // inputErrorMessage: 'Invalid Email',
+  })
+      .then(({value}) => {
+            ElMessage({
+              type: 'success',
+              message: `您绑定的本地库地址为:${value}`,
+            })
+            fileLocate.value = value;
+            console.log("fileLocate.value", fileLocate.value);
+            // 创键一个新的桶
+            createBucket();
+          }
+      )
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
 
 </script>
 

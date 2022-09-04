@@ -16,7 +16,6 @@ const app = createApp(App);
 app.use(store).use(ElementPlus).use(router).use(contextmenu).mount('#app')
 app.config.globalProperties.$axios = axios;
 
-
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }

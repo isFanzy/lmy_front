@@ -2,15 +2,24 @@ module.exports = {
     devServer: {
         port: 8080, // 端口
         proxy: {
-            '/api': { //请求路径关键字
-                target: 'https://localhost:10086/',
+            '/api': {
+                target: 'http://localhost:10086/',
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {
                     '^/api': ''
                 }
+            },
+            '/getIPapi': {
+                target: 'http://ip-api.com/',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+                    '^/getIPapi': ''
+                }
             }
         }
     },
-    lintOnSave: false // 取消 eslint 验证
+    lintOnSave: true // 取消 eslint 验证
 }
+
