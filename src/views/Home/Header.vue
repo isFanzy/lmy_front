@@ -10,10 +10,10 @@
           size="large"
           placeholder="搜索文件"
       />
-      <el-button icon="el-icon-plus" @click="uploadFile"/>
       <!--   搜索  -->
       <el-button icon="el-icon-search" @click="search"/>
 
+      <el-button icon="el-icon-plus" @click="uploadFile"/>
 
     </div>
   </div>
@@ -22,14 +22,15 @@
 <script lang="ts" setup>
 import {ElMessage, ElMessageBox} from "element-plus";
 import {getCurrentInstance, onMounted, ref} from "vue";
-import { useBucketsStore } from "@/Pinia/store/bucket";
+import {useBucketsStore} from "@/Pinia/store/bucket";
 import {storeToRefs} from "pinia";
+
 const currentBucket = useBucketsStore();
 const {proxy} = getCurrentInstance();
 const searchFor = ref("");
 const localIP = ref("");
 const fileLocate = ref("");
-const { path } = storeToRefs(currentBucket)
+const {path} = storeToRefs(currentBucket)
 /*
 * 文件上传
 * */
@@ -43,22 +44,28 @@ onMounted(() => {
 
 
 const search = function () {
-  ElMessageBox.prompt('', '搜索文件', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-  })
-      .then(({value}) => {
-        ElMessage({
-          type: 'success',
-          message: `${value}`,
+  if (searchFor.value == null) {
+    ElMessageBox.prompt('', '搜索文件', {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+    })
+        .then(({value}) => {
+          searchFor.value  = value;
+          ElMessage({
+            type: 'success',
+            message: `${value}`,
+          })
         })
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: 'Input canceled',
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: 'Input canceled',
+          })
         })
-      })
+  } else {
+
+  }
+
 }
 
 //发送创建桶请求

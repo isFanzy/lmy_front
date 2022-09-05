@@ -7,14 +7,15 @@
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
+          @select="handleSelect"
       >
         <el-sub-menu index="1">
           <template #title>
-            <span>已知桶</span>
+            <span :title="itemTitle">{{itemTitle}}</span>
           </template>
-          <el-menu-item-group :title='itemTitle' >
-            <el-menu-item v-for="item in buckets.data">
-              {{ item.path }}
+          <el-menu-item-group v-for="(item,index) in buckets.data">
+            <el-menu-item>
+              {{ item.path }}{{ index.default }}
             </el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
@@ -43,12 +44,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useBucketsStore } from "@/Pinia/store/bucket";
+import {useBucketsStore} from "@/Pinia/store/bucket";
 import {getCurrentInstance, onMounted, ref} from "vue";
 import request from "@/Utils/axiosInstance";
 import {Logger} from "sass";
+import {ElLoading} from "element-plus";
+
 const {proxy} = getCurrentInstance();
 const currentBucket = useBucketsStore();
+const fullscreenLoading = ref(false)
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -56,8 +60,11 @@ const handleOpen = (key: string, keyPath: string[]) => {
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
+const handleSelect = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath)
+}
 
-const itemTitle = ref("未指定地址")
+const itemTitle = ref("未发现桶")
 /*
 所有的桶
 GET:localhost:10086/bucket
@@ -89,15 +96,29 @@ const buckets = ref([]);
 
 onMounted(() => {
   console.log("============HOOK============")
+  // Loading 状态
+
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  setTimeout(() => {
+    loading.close()
+  }, 2000)
+  fullscreenLoading.value = true;
+
+
   proxy.$axios.get('/api/bucket').then((res) => {
     if (res.data.code != 200) {
       console.log("未找到桶")
     } else {
-      itemTitle.value = "地址";
+      itemTitle.value = "已知桶";
       buckets.value = res.data;
       console.log(buckets.value)
     }
     console.log(res.data)
+    fullscreenLoading.value = false;
   })
 })
 </script>

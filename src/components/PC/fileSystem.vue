@@ -7,9 +7,8 @@
     <v-contextmenu-item>移动</v-contextmenu-item>
     <v-contextmenu-item>查看详细信息</v-contextmenu-item>
     <v-contextmenu-item>放入回收站</v-contextmenu-item>
-
   </v-contextmenu>
-  <div class="common-layout" style="height: 100%;width: 100%">
+  <div class="common-layout" style="height: 100%;width: 100%;margin-top: 2%">
     <el-container style="height: 100%;width: 100%">
       <el-aside style="height: 100%;">
         <Aside/>

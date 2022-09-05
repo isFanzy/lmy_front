@@ -5,13 +5,11 @@
     </el-radio-group>
   </div>
   <div class="table">
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="name" label="文件名称" >
-
-      </el-table-column>
-<!--      <el-table-column prop="time" label="修改时间" width="180"/>-->
-<!--      <el-table-column prop="fileType" label="文件类型"/>-->
-<!--      <el-table-column prop="byte" label="文件大小"/>-->
+    <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+      <el-table-column prop="name" label="文件名称" @contextmenu.prevent="show"/>
+      <el-table-column prop="path" label="文件路径"/>
+      <el-table-column prop="length" label="文件大小" width="100%"/>
+      <el-table-column prop="lastModified" label="最后一次修改" width="120%"/>
     </el-table>
   </div>
 </template>
@@ -21,17 +19,24 @@ import {getCurrentInstance, onMounted, ref} from "vue";
 import {useBucketsStore} from "@/Pinia/store/bucket";
 
 const {proxy} = getCurrentInstance();
-const currentBucket = useBucketsStore();
 
+const currentBucket = useBucketsStore();
+const loading = ref(true)
 const radio1 = ref('1')
 const tableData = ref([
-  {name:"111",time:"222"}
+  {
+    name: "",
+    path: "",
+    length: "",
+    lastModified: ""
+  }
 ])
 
 // 渲染文件目录
 onMounted(() => {
   console.log("Main.vue ======= onMounted")
   getFirstFiles();
+  loading.value = false;
 })
 
 // 发送根据路径获取第一层文件(缓存优先)请求
@@ -48,7 +53,7 @@ const getFirstFiles = function () {
     if (res.data.code == 200) {
       // 获取成功
       tableData.value = res.data.data;
-      console.log("tableData.value",tableData.value)
+      console.log("tableData.value", tableData.value)
     } else {
       // 获取失败
     }
