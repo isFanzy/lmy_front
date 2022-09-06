@@ -11,25 +11,54 @@
           :percentage="progress.percent.value"
           status="progress.status.value"
       >
-
       </el-progress>
     </div>
-
+    <el-button @click="changeProgress">changeProgress</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {ElNotification} from "element-plus";
 
-const progress: any = {
-  percent: ref(0),
-  status: ref("success")
+const progress =
+    {
+      percent: ref(50),
+      status: ref("success")
+    }
+// watch() 默认是懒侦听的，即仅在侦听源发生变化时才执行回调函数
+// const changeProgress = function () {
+//   progress.percent.value = 100;
+// }
+const downloadOver = function () {
+  ElNotification.success({
+    title: 'Success',
+    message: '下载完成，请移步传输页面',
+    offset: 100,
+  })
 }
+watch(
+    () => progress.percent.value,
+    (count, prevCount) => {
+      /* ... */
+      if (count == 100) {
+        console.log("========下载完成，请移步传输页面========")
+        downloadOver();
+        progress.percent.value = 0;
+      }
+    }
+)
+// watch(progress.percent.value, () => {
+//   console.log("======下载完成======")
+//   if (progress.percent.value === 100) {
+//     downloadOver();
+//   }
+// })
 </script>
 
 <style scoped>
 .container {
   display: block;
-  margin-top: -5%;
+  margin-top: -3%;
 }
 </style>
