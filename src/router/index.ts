@@ -12,9 +12,9 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../components/PC/fileSystem.vue')
   },
   {
-    path: '/upload',
-    name: 'upload',
-    component: () => import('../components/PC/upLoad.vue')
+    path: '/test',
+    name: 'test',
+    component: () => import('../components/PC/test.vue')
   }
 ]
 
