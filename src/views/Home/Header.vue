@@ -44,13 +44,14 @@ onMounted(() => {
 
 
 const search = function () {
-  if (searchFor.value == null) {
+  // 如果为空，打开搜索框。如果不为空，直接进行搜索
+  if (searchFor.value == '') {
     ElMessageBox.prompt('', '搜索文件', {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
     })
         .then(({value}) => {
-          searchFor.value  = value;
+          searchFor.value = value;
           ElMessage({
             type: 'success',
             message: `${value}`,
@@ -63,7 +64,7 @@ const search = function () {
           })
         })
   } else {
-
+    proxy.$router.push('/');
   }
 
 }

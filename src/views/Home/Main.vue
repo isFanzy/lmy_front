@@ -1,8 +1,16 @@
 <template>
-  <v-contextmenu ref="contextmenu">
-    <v-contextmenu-item v-for="(item,index) in userRightClick.list">
-      {{ item.name }}
-    </v-contextmenu-item>
+  <v-contextmenu
+      ref="contextmenu"
+  >
+    <v-contextmenu-item @click="newFile">新建</v-contextmenu-item>
+    <v-contextmenu-item @click="downloadFile">下载</v-contextmenu-item>
+    <v-contextmenu-item @click="uploadFile">上传</v-contextmenu-item>
+    <v-contextmenu-item @click="likeFile">收藏</v-contextmenu-item>
+    <v-contextmenu-item @click="renameFile">重命名</v-contextmenu-item>
+    <v-contextmenu-item @click="moveFile">移动到</v-contextmenu-item>
+    <v-contextmenu-item @click="deleteFile">放入回收站</v-contextmenu-item>
+    <v-contextmenu-item @click="lookFile">查看详细信息</v-contextmenu-item>
+
   </v-contextmenu>
 
   <div class="title" style="display: inline-flex">
@@ -30,6 +38,7 @@
 import {getCurrentInstance, onMounted, ref} from "vue";
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {userightClickStore} from "@/Pinia/store/rightclick";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const {proxy} = getCurrentInstance();
 
@@ -85,11 +94,161 @@ const clickTableRow = (row: any, event: any, colume: any) => {
   console.log("======click======")
 }
 
+// 新建文件
+const newFile = function (name: any) {
+  ElMessageBox.prompt('文件名', '新建', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    // inputPattern:
+    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+    // inputErrorMessage: 'Invalid Email',
+  })
+      .then(({value}) => {
+        ElMessage({
+          center: true,
+          type: 'success',
+          message: `FileName is:${value}`,
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          center: true,
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
 
+// 下载文件
+const downloadFile = function () {
+  ElMessageBox.confirm(
+      '此操作将下载整个文件夹，是否继续...',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        ElMessage({
+          center: true,
+          type: 'success',
+          message: '-START DOWNLOAD-',
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          center: true,
+          type: 'info',
+          message: '- CANCEL DOWNLOAD-',
+        })
+      })
+}
+
+// 上传文件
+const uploadFile = function () {
+  ElMessageBox.confirm(
+      '此操作将上传整个文件夹到远程仓库中，是否继续...',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        ElMessage({
+          center: true,
+          type: 'success',
+          message: '-START UPLOAD-',
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          center: true,
+          type: 'info',
+          message: '-CANCEL UPLOAD-',
+        })
+      })
+}
+
+// 收藏
+const likeFile = function () {
+  ElMessage({
+    showClose: true,
+    message: '-LIKE DONE-',
+    center: true,
+  })
+}
+
+// 重命名
+const renameFile = function () {
+  ElMessageBox.prompt('文件名', '重命名', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    // inputPattern:
+    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+    // inputErrorMessage: 'Invalid Email',
+  })
+      .then(({value}) => {
+        ElMessage({
+          center: true,
+          type: 'success',
+          message: `FileName is:${value}`,
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          center: true,
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
+
+// 移动
+const moveFile = function () {
+
+}
+
+// 删除
+const deleteFile = function () {
+  ElMessageBox.confirm(
+      '此操作将删除整个文件夹，是否继续...',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        ElMessage({
+          center: true,
+          type: 'success',
+          message: '-Done-',
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          center: true,
+          type: 'info',
+          message: '-CANCEL-',
+        })
+      })
+}
+
+// 详情
+const lookFile = function () {
+  proxy.$router.push('/details')
+}
 </script>
 
 <style scoped>
 .table:hover {
   cursor: pointer;
 }
+
+
 </style>
