@@ -80,7 +80,7 @@ const createBucket = function () {
       "password": "",
       "path": fileLocate.value
     }
-  }).then(res => {
+  }).then((res: any) => {
     console.log(res.data)
     // 操作失败
     if (res.data.code != 200) {

@@ -5,37 +5,26 @@
       <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           @select="handleSelect"
       >
         <el-sub-menu index="1">
           <template #title>
-            <span :title="itemTitle">{{itemTitle}}</span>
+            <span :title="itemTitle">{{ itemTitle }}</span>
           </template>
-          <el-menu-item-group v-for="(item,index) in buckets.data">
-            <el-menu-item>
-              {{ item.path }}{{ index.default }}
-            </el-menu-item>
-          </el-menu-item-group>
+
+          <el-menu-item :index=index v-for="(item,index) in buckets.data">
+            <el-icon>
+              <Position/>
+            </el-icon>
+            {{ item.path }}
+          </el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="2">
-          <span>相册</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <el-icon>
-            <document/>
-          </el-icon>
-          <span>回收站</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon>
-            <setting/>
-          </el-icon>
-          <span>收藏夹</span>
-        </el-menu-item>
-        <el-menu-item index="5">
-          <span>传输</span>
+        <el-menu-item
+            :index=item.index
+            :disabled="item.ifDisable"
+            v-for="(item,index) in asidelist.list.value"
+        >
+          {{ item.name }}
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -46,22 +35,37 @@
 <script lang="ts" setup>
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {getCurrentInstance, onMounted, ref} from "vue";
-import request from "@/Utils/axiosInstance";
-import {Logger} from "sass";
 import {ElLoading} from "element-plus";
+import {useAsideList} from "@/Pinia/store/asideList";
+import {storeToRefs} from "pinia";
 
 const {proxy} = getCurrentInstance();
 const currentBucket = useBucketsStore();
 const fullscreenLoading = ref(false)
 
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+const asidelist = storeToRefs(useAsideList())
+
+const handleSelect = (key: string, keyPath: string[], item: any) => {
+  switch (item.index) {
+    case "a":
+      asidelist.current.value = "scanAllPhotos"
+      console.log('a', asidelist.current.value)
+      break;
+    case 'b':
+      asidelist.current.value = "scanAllCash"
+      console.log('b', asidelist.current.value);
+      break;
+    case 'c':
+      asidelist.current.value = "scanAllFavorite"
+      console.log('c', asidelist.current.value);
+      break;
+    case 'd':
+      asidelist.current.value = "scanAllLoadings"
+      console.log('d', asidelist.current.value);
+      break;
+    default:
+      asidelist.current.value = "scanFiles"
+  }
 }
 
 const itemTitle = ref("未发现桶")
@@ -97,7 +101,6 @@ const buckets = ref([]);
 onMounted(() => {
   console.log("============HOOK============")
   // Loading 状态
-
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -105,11 +108,10 @@ onMounted(() => {
   })
   setTimeout(() => {
     loading.close()
-  }, 2000)
+  }, 2 * 1000)
   fullscreenLoading.value = true;
 
-
-  proxy.$axios.get('/api/bucket').then((res) => {
+  proxy.$axios.get('/api/bucket').then((res: any) => {
     if (res.data.code != 200) {
       console.log("未找到桶")
     } else {

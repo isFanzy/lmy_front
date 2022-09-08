@@ -1,254 +1,52 @@
 <template>
-  <v-contextmenu
-      ref="contextmenu"
-  >
-    <v-contextmenu-item @click="newFile">新建</v-contextmenu-item>
-    <v-contextmenu-item @click="downloadFile">下载</v-contextmenu-item>
-    <v-contextmenu-item @click="uploadFile">上传</v-contextmenu-item>
-    <v-contextmenu-item @click="likeFile">收藏</v-contextmenu-item>
-    <v-contextmenu-item @click="renameFile">重命名</v-contextmenu-item>
-    <v-contextmenu-item @click="moveFile">移动到</v-contextmenu-item>
-    <v-contextmenu-item @click="deleteFile">放入回收站</v-contextmenu-item>
-    <v-contextmenu-item @click="lookFile">查看详细信息</v-contextmenu-item>
-
-  </v-contextmenu>
-
-  <div class="title" style="display: inline-flex">
-    <el-radio-group v-model="radio1" class="ml-4">
-      <el-radio label="1" size="large">全选</el-radio>
-    </el-radio-group>
-  </div>
-  <div class="table" v-contextmenu:contextmenu>
-    <el-table
-        :data="tableData"
-        border
-        style="width: 100%"
-        v-loading="loading"
-        @row-contextmenu="clickTableRow"
-    >
-      <el-table-column prop="name" label="文件名称"/>
-      <el-table-column prop="path" label="文件路径"/>
-      <el-table-column prop="length" label="文件大小" width="100%"/>
-      <el-table-column prop="lastModified" label="最后一次修改" width="120%"/>
-    </el-table>
+  <div class="container">
+    <component :is="asideList.current.value"/>
   </div>
 </template>
 
-<script lang="ts" setup>
-import {getCurrentInstance, onMounted, ref} from "vue";
-import {useBucketsStore} from "@/Pinia/store/bucket";
-import {userightClickStore} from "@/Pinia/store/rightclick";
-import {ElMessage, ElMessageBox} from "element-plus";
+<script lang="ts">
+import scanFiles from '@/views/Home/mainComponent/scanAllFiles.vue'
+import scanAllPhotos from '@/views/Home/mainComponent/scanAllPhotos.vue'
+import scanAllCash from '@/views/Home/mainComponent/scanAllCash.vue'
+import scanAllFavorite from '@/views/Home/mainComponent/scanAllFavorite.vue'
+import scanAllLoadings from '@/views/Home/mainComponent/scanAllLoadings.vue'
 
-const {proxy} = getCurrentInstance();
+import {useAsideList} from "@/Pinia/store/asideList";
+import {storeToRefs} from "pinia";
+import {getCurrentInstance, onMounted, ref, render, watch} from "vue";
 
-// STORE
-const currentBucket = useBucketsStore();
-const userRightClick = userightClickStore();
 
-const loading = ref(true)
-const radio1 = ref('1')
-const tableData = ref([
-  {
-    name: "",
-    path: "",
-    length: "",
-    lastModified: ""
-  }
-])
-const menuList = [];
+export default {
+  setup() {
+    const {proxy} = getCurrentInstance()
+    const asideList = storeToRefs(useAsideList())
 
-// 渲染文件目录
-onMounted(() => {
-  console.log("Main.vue ======= onMounted")
-  getFirstFiles();
-  userRightClick.list.forEach(res => {
-    console.log("res", res);
-  })
-  loading.value = false;
-})
-
-// 发送根据路径获取第一层文件(缓存优先)请求
-const getFirstFiles = function () {
-  console.log("========getFirstFiles========")
-  proxy.$axios({
-    method: 'get',
-    url: '/api/getFilesByPath',
-    params: {
-      path: "D:\\cloudTest\\1",
-      userIp: "121.225.44.233",
+    const currentComponent = function () {
+      console.log("currentComponent", asideList.current.value)
+      return `${asideList.current.value}`
     }
-  }).then((res: any) => {
-    if (res.data.code == 200) {
-      // 获取成功
-      tableData.value = res.data.data;
-      console.log("tableData.value", tableData.value)
-    } else {
-      // 获取失败
+    watch(() => asideList.current.value,
+        (value, prev) => {
+          /* ... */
+          currentComponent();
+        }
+    )
+    return {
+      asideList,
+      currentComponent
     }
-  })
-}
-
-// 每一行 item 的点击事件
-const clickTableRow = (row: any, event: any, colume: any) => {
-  console.log("======click======")
-}
-
-// 新建文件
-const newFile = function (name: any) {
-  ElMessageBox.prompt('文件名', '新建', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    // inputPattern:
-    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    // inputErrorMessage: 'Invalid Email',
-  })
-      .then(({value}) => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: `FileName is:${value}`,
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: 'Input canceled',
-        })
-      })
-}
-
-// 下载文件
-const downloadFile = function () {
-  ElMessageBox.confirm(
-      '此操作将下载整个文件夹，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-START DOWNLOAD-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '- CANCEL DOWNLOAD-',
-        })
-      })
-}
-
-// 上传文件
-const uploadFile = function () {
-  ElMessageBox.confirm(
-      '此操作将上传整个文件夹到远程仓库中，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-START UPLOAD-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '-CANCEL UPLOAD-',
-        })
-      })
-}
-
-// 收藏
-const likeFile = function () {
-  ElMessage({
-    showClose: true,
-    message: '-LIKE DONE-',
-    center: true,
-  })
-}
-
-// 重命名
-const renameFile = function () {
-  ElMessageBox.prompt('文件名', '重命名', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    // inputPattern:
-    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    // inputErrorMessage: 'Invalid Email',
-  })
-      .then(({value}) => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: `FileName is:${value}`,
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: 'Input canceled',
-        })
-      })
-}
-
-// 移动
-const moveFile = function () {
-
-}
-
-// 删除
-const deleteFile = function () {
-  ElMessageBox.confirm(
-      '此操作将删除整个文件夹，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-Done-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '-CANCEL-',
-        })
-      })
-}
-
-// 详情
-const lookFile = function () {
-  proxy.$router.push('/details')
+  },
+  components: {
+    scanFiles,
+    scanAllPhotos,
+    scanAllCash,
+    scanAllFavorite,
+    scanAllLoadings
+  },
 }
 </script>
 
 <style scoped>
-.table:hover {
-  cursor: pointer;
-}
 
 
 </style>

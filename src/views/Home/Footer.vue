@@ -23,7 +23,7 @@ import {ElNotification} from "element-plus";
 
 const progress =
     {
-      percent: ref(50),
+      percent: ref(0),
       status: ref("success")
     }
 // watch() 默认是懒侦听的，即仅在侦听源发生变化时才执行回调函数

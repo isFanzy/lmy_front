@@ -3,7 +3,10 @@ import {defineStore} from 'pinia'
 export const useBucketsStore = defineStore('buckets', {
     state: () => {
         return {
-            "path":""
+            "path":"",
+            "currentBucket":{
+
+            }
         }
     },
     // 计算属性

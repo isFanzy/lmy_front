@@ -6,7 +6,7 @@
       <el-aside style="height: 100%;">
         <Aside/>
       </el-aside>
-      <el-container style="margin-top: 3%">
+      <el-container style="margin-top: 2%">
         <el-header>
           <Header/>
         </el-header>
@@ -40,8 +40,7 @@ onMounted(() => {
       ElMessageBox.prompt('请输入本地库地址', '未发现指定文件夹', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        // inputPattern:
-        //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
         inputErrorMessage: 'Invalid Email',
       })
           .then(({value}) => {
