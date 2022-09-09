@@ -5,11 +5,11 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 // import scanAllFavorite from '@/views/Home/mainComponent/scanAllFavorite.vue'
 // import scanAllLoadings from '@/views/Home/mainComponent/scanAllFiles.vue'
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: '/',
-  //   name: 'loginView',
-  //   component: () => import('../components/PC/HelloWorld.vue')
-  // },
+  {
+    path: '/',
+    name: 'loginView',
+    component: () => import('../components/PC/HelloWorld.vue')
+  },
   {
     path: '/homeView',
     name: 'homeView',

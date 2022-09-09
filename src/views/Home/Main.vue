@@ -15,10 +15,8 @@ import {useAsideList} from "@/Pinia/store/asideList";
 import {storeToRefs} from "pinia";
 import {getCurrentInstance, onMounted, ref, render, watch} from "vue";
 
-
 export default {
   setup() {
-    const {proxy} = getCurrentInstance()
     const asideList = storeToRefs(useAsideList())
 
     const currentComponent = function () {

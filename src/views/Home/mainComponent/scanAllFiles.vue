@@ -42,10 +42,11 @@
 // STORE
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {userightClickStore} from "@/Pinia/store/rightclick";
-import {getCurrentInstance, onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {storeToRefs} from "pinia";
 
-const currentBucket = useBucketsStore();
+const currentBucket = storeToRefs(useBucketsStore());
 const userRightClick = userightClickStore();
 
 const {proxy} = getCurrentInstance();
@@ -70,7 +71,12 @@ onMounted(() => {
   })
   loading.value = false;
 })
-
+watch(() => currentBucket.path.value,
+    (value, prev) => {
+      /* ... */
+      getFirstFiles();
+    }
+)
 // 发送根据路径获取第一层文件(缓存优先)请求
 const getFirstFiles = function () {
   console.log("========getFirstFiles========")
@@ -78,7 +84,7 @@ const getFirstFiles = function () {
     method: 'get',
     url: '/api/getFilesByPath',
     params: {
-      path: "D:\\cloudTest\\1",
+      path: currentBucket.path.value,
       userIp: "121.225.44.233",
     }
   }).then((res: any) => {
@@ -88,6 +94,7 @@ const getFirstFiles = function () {
       console.log("tableData.value", tableData.value)
     } else {
       // 获取失败
+      console.log("tableData.value", tableData.value)
     }
   })
 }

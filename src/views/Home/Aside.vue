@@ -7,12 +7,12 @@
           class="el-menu-vertical-demo"
           @select="handleSelect"
       >
-        <el-sub-menu index="1">
+        <el-sub-menu>
           <template #title>
             <span :title="itemTitle">{{ itemTitle }}</span>
           </template>
 
-          <el-menu-item :index=index v-for="(item,index) in buckets.data">
+          <el-menu-item :index=item.path v-for="(item,index) in buckets.data">
             <el-icon>
               <Position/>
             </el-icon>
@@ -28,7 +28,6 @@
         </el-menu-item>
       </el-menu>
     </el-col>
-
   </el-row>
 </template>
 
@@ -40,12 +39,13 @@ import {useAsideList} from "@/Pinia/store/asideList";
 import {storeToRefs} from "pinia";
 
 const {proxy} = getCurrentInstance();
-const currentBucket = useBucketsStore();
+const currentBucket = storeToRefs(useBucketsStore());
 const fullscreenLoading = ref(false)
 
 const asidelist = storeToRefs(useAsideList())
 
 const handleSelect = (key: string, keyPath: string[], item: any) => {
+  currentBucket.path.value = item.index.replaceAll(/\\/g,"\\\\")
   switch (item.index) {
     case "a":
       asidelist.current.value = "scanAllPhotos"
@@ -96,7 +96,7 @@ GET:localhost:10086/bucket
 	]
 }
 * */
-const buckets = ref([]);
+const buckets = ref([""]);
 
 onMounted(() => {
   console.log("============HOOK============")
@@ -117,9 +117,9 @@ onMounted(() => {
     } else {
       itemTitle.value = "已知桶";
       buckets.value = res.data;
-      console.log(buckets.value)
+      console.log("buckets.value", buckets.value)
     }
-    console.log(res.data)
+    console.log("res.data",res.data)
     fullscreenLoading.value = false;
   })
 })

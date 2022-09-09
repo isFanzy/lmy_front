@@ -77,7 +77,7 @@ const createBucket = function () {
     params: {
       "bucketId": "",
       "whiteIpList": localIP.value,
-      "password": "",
+      "password": "123456",
       "path": fileLocate.value
     }
   }).then((res: any) => {
