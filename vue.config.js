@@ -11,7 +11,7 @@ module.exports = {
                 }
             },
             '/getIPapi': {
-                target: 'http://ip-api.com/',
+                target: 'http://ident.me/',
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {

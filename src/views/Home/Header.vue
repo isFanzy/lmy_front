@@ -31,14 +31,16 @@ const searchFor = ref("");
 const localIP = ref("");
 const fileLocate = ref("");
 const {path} = storeToRefs(currentBucket)
+let ipList = ref([''])
 /*
 * 文件上传
 * */
+
 // 获取ip
 onMounted(() => {
-  proxy.$axios.post('/getIPapi/json/?lang=zh-CN').then(res => {
-    localIP.value = res.data.query;
-    console.log("=======本地IP1========" + localIP.value);
+  proxy.$axios.post('/getIPapi/.json/').then((res: any) => {
+    console.log("res.data", res.data.address)
+    localIP.value = res.data.address;
   })
 })
 
@@ -70,18 +72,29 @@ const search = function () {
 }
 
 //发送创建桶请求
+interface requestBody {
+  "bucketId": string;
+  "whiteIpList": string[];
+  "password": string;
+  "path": string;
+}
+
+
 const createBucket = function () {
+  const newBucket: requestBody = {
+    bucketId: "",
+    whiteIpList: [],
+    password: "123456",
+    path: fileLocate.value
+  }
+  newBucket.whiteIpList.push(localIP.value)
+  console.log(newBucket)
   proxy.$axios({
     method: 'post',
     url: '/api/bucket',
-    params: {
-      "bucketId": "",
-      "whiteIpList": localIP.value,
-      "password": "123456",
-      "path": fileLocate.value
-    }
+    data: newBucket
   }).then((res: any) => {
-    console.log(res.data)
+
     // 操作失败
     if (res.data.code != 200) {
       ElMessage.error(res.data.data)
@@ -89,8 +102,7 @@ const createBucket = function () {
       //操作成功
       currentBucket.path = fileLocate.value;
       ElMessage.success(res.data.data);
-    }
-  })
+    }  })
 }
 const uploadFile = function () {
   ElMessageBox.prompt('请输入本地库地址', '绑定本地库', {

@@ -20,14 +20,26 @@
     </div>
 
     <div class="container">
+      <div style="margin-top: 20px">
+        <el-button @click="toggleSelection([tableData[1], tableData[2]])"
+        >Toggle selection status of second and third rows
+        </el-button
+        >
+        <el-button @click="toggleSelection()">Clear selection</el-button>
+      </div>
       <div class="table" v-contextmenu:contextmenu>
         <el-table
+            ref="multipleTableRef"
             :data="tableData"
+            @selection-change="handleSelectionChange"
             border
             style="width: 100%"
             v-loading="loading"
             @row-contextmenu="clickTableRow"
+            @row-click="leftClick"
+            size="default"
         >
+          <el-table-column type="selection" width="45"/>
           <el-table-column prop="name" label="文件名称"/>
           <el-table-column prop="path" label="文件路径"/>
           <el-table-column prop="length" label="文件大小" width="100%"/>
@@ -98,10 +110,29 @@ const getFirstFiles = function () {
     }
   })
 }
+// 多选
+const multipleTableRef = ref<InstanceType<typeof ElTable>>()
+const multipleSelection = ref<User[]>([])
+const toggleSelection = (rows?: User[]) => {
+  if (rows) {
+    rows.forEach((row) => {
+      multipleTableRef.value!.toggleRowSelection(row, undefined)
+    })
+  } else {
+    multipleTableRef.value!.clearSelection()
+  }
+}
+const handleSelectionChange = (val: User[]) => {
+  multipleSelection.value = val
+}
 
-// 每一行 item 的点击事件
+// 每一行 item 的右键击事件
 const clickTableRow = (row: any, event: any, colume: any) => {
-  console.log("======click======")
+  console.log("======right click======")
+}
+// 每一行 item 的左键击事件
+const leftClick = function () {
+  console.log("======left click======")
 }
 
 // 新建文件
@@ -260,4 +291,5 @@ const lookFile = function () {
 .table:hover {
   cursor: pointer;
 }
+
 </style>

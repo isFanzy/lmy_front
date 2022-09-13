@@ -1,9 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-//import scanFiles from '@/views/Home/mainComponent/scanAllFiles.vue'
-// import scanAllPhotos from '@/views/Home/mainComponent/scanAllPhotos.vue'
-// import scanAllCash from '@/views/Home/mainComponent/scanAllCash.vue'
-// import scanAllFavorite from '@/views/Home/mainComponent/scanAllFavorite.vue'
-// import scanAllLoadings from '@/views/Home/mainComponent/scanAllFiles.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -31,19 +27,22 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Home/mainComponent/scanAllFiles.vue')
   },
 
-
-
-
-
-
-
-
   {
     path: '/:catchAll(.*)',
     name: '/404',
     component: () => import('../views/404.vue')
   },
 ]
+
+
+// const fileRoute : Array<RouteRecordRaw> = [
+//   {
+//     path: '/',
+//     name: 'loginView',
+//     component: () => import('../components/PC/HelloWorld.vue')
+//   },
+// ]
+
 
 const router = createRouter({
   history: createWebHashHistory(),
