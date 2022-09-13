@@ -34,7 +34,7 @@
 <script lang="ts" setup>
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {getCurrentInstance, onMounted, ref} from "vue";
-import {ElLoading} from "element-plus";
+import {ElMessage, ElLoading} from "element-plus";
 import {useAsideList} from "@/Pinia/store/asideList";
 import {storeToRefs} from "pinia";
 
@@ -45,7 +45,7 @@ const fullscreenLoading = ref(false)
 const asidelist = storeToRefs(useAsideList())
 
 const handleSelect = (key: string, keyPath: string[], item: any) => {
-  currentBucket.path.value = item.index.replaceAll(/\\/g,"\\\\")
+  currentBucket.path.value = item.index.replaceAll(/\\/g, "\\\\")
   switch (item.index) {
     case "a":
       asidelist.current.value = "scanAllPhotos"
@@ -111,15 +111,14 @@ onMounted(() => {
   }, 2 * 1000)
   fullscreenLoading.value = true;
 
+  // 拿到所有桶
   proxy.$axios.get('/api/bucket').then((res: any) => {
     if (res.data.code != 200) {
-      console.log("未找到桶")
+      ElMessage.error("未找到桶")
     } else {
       itemTitle.value = "已知桶";
       buckets.value = res.data;
-      console.log("buckets.value", buckets.value)
     }
-    console.log("res.data",res.data)
     fullscreenLoading.value = false;
   })
 })

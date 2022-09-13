@@ -79,7 +79,7 @@ interface requestBody {
   "path": string;
 }
 
-
+// 创建一个新的 桶
 const createBucket = function () {
   const newBucket: requestBody = {
     bucketId: "",
@@ -94,7 +94,6 @@ const createBucket = function () {
     url: '/api/bucket',
     data: newBucket
   }).then((res: any) => {
-
     // 操作失败
     if (res.data.code != 200) {
       ElMessage.error(res.data.data)

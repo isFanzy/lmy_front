@@ -13,19 +13,13 @@
       <v-contextmenu-item @click="lookFile">查看详细信息</v-contextmenu-item>
     </v-contextmenu>
 
-    <div class="title" style="display: inline-flex">
-      <el-radio-group v-model="radio1" class="ml-4">
-        <el-radio label="1" size="large">全选</el-radio>
-      </el-radio-group>
-    </div>
-
     <div class="container">
-      <div style="margin-top: 20px">
+      <div class="title" style="margin-top: 20px">
         <el-button @click="toggleSelection([tableData[1], tableData[2]])"
-        >Toggle selection status of second and third rows
+        >全选
         </el-button
         >
-        <el-button @click="toggleSelection()">Clear selection</el-button>
+        <el-button @click="toggleSelection()">取消全选</el-button>
       </div>
       <div class="table" v-contextmenu:contextmenu>
         <el-table
@@ -55,8 +49,9 @@
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {userightClickStore} from "@/Pinia/store/rightclick";
 import {getCurrentInstance, onMounted, ref, watch} from "vue";
-import {ElMessage, ElMessageBox} from "element-plus";
+import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import {storeToRefs} from "pinia";
+import {User} from "@element-plus/icons-vue/dist/types";
 
 const currentBucket = storeToRefs(useBucketsStore());
 const userRightClick = userightClickStore();
@@ -91,7 +86,6 @@ watch(() => currentBucket.path.value,
 )
 // 发送根据路径获取第一层文件(缓存优先)请求
 const getFirstFiles = function () {
-  console.log("========getFirstFiles========")
   proxy.$axios({
     method: 'get',
     url: '/api/getFilesByPath',
@@ -103,10 +97,8 @@ const getFirstFiles = function () {
     if (res.data.code == 200) {
       // 获取成功
       tableData.value = res.data.data;
-      console.log("tableData.value", tableData.value)
     } else {
-      // 获取失败
-      console.log("tableData.value", tableData.value)
+      ElMessage.error("未在本地找到指定桶")
     }
   })
 }

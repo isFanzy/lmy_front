@@ -4,7 +4,20 @@ export const useBucketsStore = defineStore('buckets', {
     state: () => {
         return {
             "path": '',
-            "ip": ""
+            "ip": "",
+            "fileTree": [
+                {
+                    "name": "",
+                    "path": "",
+                    "child": [
+                        {
+                            "name": "",
+                            "path": "",
+                            "child": []
+                        },
+                    ]
+                }
+            ],
         }
     },
     // 计算属性
