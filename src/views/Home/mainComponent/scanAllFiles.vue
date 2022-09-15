@@ -15,10 +15,8 @@
 
     <div class="container">
       <div class="title" style="margin-top: 20px">
-        <el-button @click="toggleSelection([tableData[1], tableData[2]])"
-        >全选
-        </el-button
-        >
+        <el-button @click="toggleSelection([tableData[0]])">全选
+        </el-button>
         <el-button @click="toggleSelection()">取消全选</el-button>
       </div>
       <div class="table" v-contextmenu:contextmenu>
@@ -108,7 +106,7 @@ const multipleSelection = ref<User[]>([])
 const toggleSelection = (rows?: User[]) => {
   if (rows) {
     rows.forEach((row) => {
-      multipleTableRef.value!.toggleRowSelection(row, undefined)
+      multipleTableRef.value!.toggleAllSelection()
     })
   } else {
     multipleTableRef.value!.clearSelection()

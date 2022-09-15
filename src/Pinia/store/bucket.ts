@@ -26,9 +26,7 @@ export const
                             }
                         ],
                     }
-                }
-
-                ,
+                },
 // 计算属性
                 getters: {}
             })

@@ -117,7 +117,7 @@ const createBucket = function () {
       ElMessage.error(res.data.data)
     } else {
       //操作成功
-      currentBucket.path = fileLocate.value;
+      currentBucket.path.value = fileLocate.value;
       ElMessage.success(res.data.data);
     }
   })
