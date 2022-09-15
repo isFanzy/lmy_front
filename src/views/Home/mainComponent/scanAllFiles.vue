@@ -73,9 +73,9 @@ const menuList = [];
 onMounted(() => {
   console.log("Main.vue ======= onMounted")
   getFirstFiles();
-  userRightClick.list.forEach(res => {
-    console.log("res", res);
-  })
+  // userRightClick.list.forEach(res => {
+  //   console.log("res", res);
+  // })
   loading.value = false;
 })
 watch(() => currentBucket.path.value,
@@ -125,6 +125,7 @@ const clickTableRow = (row: any, event: any, colume: any) => {
 // 每一行 item 的左键击事件
 const leftClick = function () {
   console.log("======left click======")
+
 }
 
 // 新建文件

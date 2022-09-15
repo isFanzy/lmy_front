@@ -1,8 +1,8 @@
 import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
-import {useBucketsStore} from "@/Pinia/store/bucket";
-import {storeToRefs} from "pinia";
-
-const bucket = storeToRefs(useBucketsStore()).path;
+// import {useBucketsStore} from "@/Pinia/store/bucket";
+// import {storeToRefs} from "pinia";
+//
+// const bucket = storeToRefs(useBucketsStore()).path;
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -52,10 +52,10 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
-if (bucket.value != null)
-// 路由守卫
-router.beforeEach((to, from, next) => {
-
-})
+// if (bucket.value != null)
+// // 路由守卫
+// router.beforeEach((to, from, next) => {
+//
+// })
 
 export default router

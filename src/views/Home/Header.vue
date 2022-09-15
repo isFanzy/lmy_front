@@ -25,12 +25,11 @@ import {getCurrentInstance, onMounted, ref} from "vue";
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {storeToRefs} from "pinia";
 
-const currentBucket = useBucketsStore();
 const {proxy} = getCurrentInstance();
 const searchFor = ref("");
 const localIP = ref("");
 const fileLocate = ref("");
-const {path} = storeToRefs(currentBucket)
+const currentBucket = storeToRefs(useBucketsStore())
 let ipList = ref([''])
 /*
 * 文件上传
@@ -39,7 +38,7 @@ let ipList = ref([''])
 // 获取ip
 onMounted(() => {
   proxy.$axios.post('/getIPapi/.json/').then((res: any) => {
-    console.log("res.data", res.data.address)
+    // console.log("res.data", res.data.address)
     localIP.value = res.data.address;
   })
 })
@@ -54,10 +53,30 @@ const search = function () {
     })
         .then(({value}) => {
           searchFor.value = value;
-          ElMessage({
-            type: 'success',
-            message: `${value}`,
-          })
+          if (searchFor.value == null || value == null) {
+            ElMessage.error("无法搜索空文件夹")
+          } else {
+            ElMessage({
+              type: 'success',
+              message: `${value}`,
+            });
+            // 搜索
+            proxy.$axios({
+              method: 'post',
+              url: '/api/searchFiles',
+              params: {
+                path: currentBucket.path.value + currentBucket.fileTree,
+                name: searchFor.value,
+              }
+            }).then((res: any) => {
+              if (res.data.code == 200) {
+                // 获取成功
+                tableData.value = res.data.data;
+              } else {
+                ElMessage.error("未找到指定文件")
+              }
+            })
+          }
         })
         .catch(() => {
           ElMessage({
@@ -68,7 +87,6 @@ const search = function () {
   } else {
     proxy.$router.push('/');
   }
-
 }
 
 //发送创建桶请求
@@ -101,7 +119,8 @@ const createBucket = function () {
       //操作成功
       currentBucket.path = fileLocate.value;
       ElMessage.success(res.data.data);
-    }  })
+    }
+  })
 }
 const uploadFile = function () {
   ElMessageBox.prompt('请输入本地库地址', '绑定本地库', {
