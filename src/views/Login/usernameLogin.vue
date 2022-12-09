@@ -8,7 +8,7 @@
       </el-input>
     </el-form-item>
   </el-form>
-  <el-button class="btnLogin" type="primary">登录</el-button>
+  <el-button class="btnLogin" type="primary" @click="login">登录</el-button>
 
 
   <div class="bottom">
@@ -27,8 +27,9 @@
 <script lang="ts" setup>
 import {ElMessage, ElMessageBox} from "element-plus";
 import {Action} from "element-plus";
-import {ref} from "vue";
+import {getCurrentInstance, ref} from "vue";
 
+const {proxy} = getCurrentInstance();
 const messageBox = ref({
   phoneNum: ref(''),
   code: ref('')
@@ -71,6 +72,12 @@ const baseRules = ref({
 let autoLogin = ref('0')
 const ifAuto = function () {
   console.log("11111");
+}
+const login = function () {
+  if (messageBox.value.phoneNum === "admin" && messageBox.value.code === "admin") {
+    console.log("====success====")
+    proxy.$router.push("/homeView")
+  }
 }
 </script>
 

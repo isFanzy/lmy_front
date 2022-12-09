@@ -3,8 +3,24 @@ import {defineStore} from 'pinia'
 export const useAsideList = defineStore('asideList', {
     state: () => {
         return {
-            "current":"scanFiles",
+            "current": "scanFiles",
             "list": [
+                {
+                    "index": "f",
+                    "name": "考勤总表",
+                    "route": "/photo",
+                    "imEmpty": true,
+                    "ifShow": true,
+                    "ifDisable": false
+                },
+                {
+                    "index": "b",
+                    "name": "表单注入",
+                    "route": "/switchTable",
+                    "imEmpty": true,
+                    "ifShow": false,
+                    "ifDisable": false
+                },
                 {
                     "index": "a",
                     "name": "相册",
@@ -14,8 +30,8 @@ export const useAsideList = defineStore('asideList', {
                     "ifDisable": false
                 },
                 {
-                    "index": "b",
-                    "name": "回收站",
+                    "index": "e",
+                    "name": "OCR",
                     "route": "/photo",
                     "imEmpty": true,
                     "ifShow": true,
@@ -23,7 +39,7 @@ export const useAsideList = defineStore('asideList', {
                 },
                 {
                     "index": "c",
-                    "name": "收藏夹",
+                    "name": "文件转换",
                     "route": "/photo",
                     "imEmpty": true,
                     "ifShow": false,
@@ -37,6 +53,7 @@ export const useAsideList = defineStore('asideList', {
                     "ifShow": false,
                     "ifDisable": false
                 }
+
             ]
         }
     }

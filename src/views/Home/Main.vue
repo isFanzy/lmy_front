@@ -10,6 +10,7 @@ import scanAllPhotos from '@/views/Home/mainComponent/scanAllPhotos.vue'
 import scanAllCash from '@/views/Home/mainComponent/scanAllCash.vue'
 import scanAllFavorite from '@/views/Home/mainComponent/scanAllFavorite.vue'
 import scanAllLoadings from '@/views/Home/mainComponent/scanAllLoadings.vue'
+import switchTables from '@/views/Home/mainComponent/switchTables.vue'
 
 import {useAsideList} from "@/Pinia/store/asideList";
 import {storeToRefs} from "pinia";
@@ -39,7 +40,8 @@ export default {
     scanAllPhotos,
     scanAllCash,
     scanAllFavorite,
-    scanAllLoadings
+    scanAllLoadings,
+    switchTables
   },
 }
 </script>

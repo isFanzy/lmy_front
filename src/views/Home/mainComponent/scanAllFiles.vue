@@ -14,7 +14,7 @@
     </v-contextmenu>
 
     <div class="container">
-      <div class="title" style="margin-top: 20px">
+      <div class="title" style="margin-top: 20px;margin-bottom: 20px">
         <el-button @click="toggleSelection([tableData[0]])">全选
         </el-button>
         <el-button @click="toggleSelection()">取消全选</el-button>
@@ -29,13 +29,30 @@
             v-loading="loading"
             @row-contextmenu="clickTableRow"
             @row-click="leftClick"
-            size="default"
+            size="small"
         >
           <el-table-column type="selection" width="45"/>
-          <el-table-column prop="name" label="文件名称"/>
-          <el-table-column prop="path" label="文件路径"/>
-          <el-table-column prop="length" label="文件大小" width="100%"/>
-          <el-table-column prop="lastModified" label="最后一次修改" width="120%"/>
+          <el-table-column prop="departmentName" label="部门"/>
+          <el-table-column prop="username" label="姓名"/>
+          <el-table-column prop="normalAttendance" label="正常出勤"/>
+          <el-table-column prop="holidayYSick" label="疫情假（天）"/>
+          <el-table-column prop="doubleOvertime" label="双休加班（时）"/>
+          <el-table-column prop="normalOvertime" label="法定加班（时）"/>
+          <el-table-column prop="rest" label="调休（天）"/>
+          <el-table-column prop="trip" label="出差"/>
+          <el-table-column prop="holidayBusiness" label="事假（天）"/>
+          <el-table-column prop="holidaySick" label="病假（天）"/>
+          <el-table-column prop="holidayFree" label="带薪假（天）"/>
+          <el-table-column prop="afterNightOvertime" label="夜班（个）"/>
+          <el-table-column prop="nightOvertime" label="晚班（个）"/>
+          <el-table-column prop="lastOvertime" label="加班(h)"/>
+          <el-table-column prop="totleTime" label="总值班（个）"/>
+          <el-table-column prop="lastFree" label="余休(h)"/>
+          <el-table-column prop="late" label="迟到早退"/>
+          <el-table-column prop="allIn" label="全勤"/>
+          <el-table-column prop="note" label="备注"/>
+          <el-table-column prop="sign" label="签名"/>
+          <el-table-column prop="createTime" label="入职日期"/>
         </el-table>
       </div>
     </div>
@@ -49,7 +66,6 @@ import {userightClickStore} from "@/Pinia/store/rightclick";
 import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import {storeToRefs} from "pinia";
-import {User} from "@element-plus/icons-vue/dist/types";
 
 const currentBucket = storeToRefs(useBucketsStore());
 const userRightClick = userightClickStore();
@@ -59,48 +75,21 @@ const loading = ref(true)
 const radio1 = ref('1')
 const tableData = ref([
   {
-    name: "",
-    path: "",
-    length: "",
-    lastModified: ""
+
   }
 ])
-const menuList = [];
 
 // 渲染文件目录
 onMounted(() => {
   console.log("Main.vue ======= onMounted")
-  getFirstFiles();
-  // userRightClick.list.forEach(res => {
-  //   console.log("res", res);
-  // })
   loading.value = false;
 })
 watch(() => currentBucket.path.value,
     (value, prev) => {
       /* ... */
-      getFirstFiles();
+      // getFirstFiles();
     }
 )
-// 发送根据路径获取第一层文件(缓存优先)请求
-const getFirstFiles = function () {
-  proxy.$axios({
-    method: 'get',
-    url: '/api/getFilesByPath',
-    params: {
-      path: currentBucket.path.value,
-      userIp: "121.225.44.233",
-    }
-  }).then((res: any) => {
-    if (res.data.code == 200) {
-      // 获取成功
-      tableData.value = res.data.data;
-    } else {
-      ElMessage.error("未在本地找到指定桶")
-    }
-  })
-}
-// 多选
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<User[]>([])
 const toggleSelection = (rows?: User[]) => {
@@ -126,156 +115,6 @@ const leftClick = function () {
 
 }
 
-// 新建文件
-const newFile = function (name: any) {
-  ElMessageBox.prompt('文件名', '新建', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    // inputPattern:
-    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    // inputErrorMessage: 'Invalid Email',
-  })
-      .then(({value}) => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: `FileName is:${value}`,
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: 'Input canceled',
-        })
-      })
-}
-
-// 下载文件
-const downloadFile = function () {
-  ElMessageBox.confirm(
-      '此操作将下载整个文件夹，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-START DOWNLOAD-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '- CANCEL DOWNLOAD-',
-        })
-      })
-}
-
-// 上传文件
-const uploadFile = function () {
-  ElMessageBox.confirm(
-      '此操作将上传整个文件夹到远程仓库中，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-START UPLOAD-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '-CANCEL UPLOAD-',
-        })
-      })
-}
-
-// 收藏
-const likeFile = function () {
-  ElMessage({
-    type: 'success',
-    showClose: true,
-    message: '-DONE-',
-    center: true,
-  })
-}
-
-// 重命名
-const renameFile = function () {
-  ElMessageBox.prompt('文件名', '重命名', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    // inputPattern:
-    //     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    // inputErrorMessage: 'Invalid Email',
-  })
-      .then(({value}) => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: `FileName is:${value}`,
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: 'Input canceled',
-        })
-      })
-}
-
-// 移动
-const moveFile = function () {
-
-}
-
-// 删除
-const deleteFile = function () {
-  ElMessageBox.confirm(
-      '此操作将删除整个文件夹，是否继续...',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-        ElMessage({
-          center: true,
-          type: 'success',
-          message: '-Done-',
-        })
-      })
-      .catch(() => {
-        ElMessage({
-          center: true,
-          type: 'info',
-          message: '-CANCEL-',
-        })
-      })
-}
-
-// 详情
-const lookFile = function () {
-  proxy.$router.push('/details')
-}
 </script>
 
 <style scoped>

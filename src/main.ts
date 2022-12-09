@@ -7,7 +7,6 @@ import './registerServiceWorker'
 import router from './router'
 import contextmenu from "v-contextmenu";
 import "v-contextmenu/dist/themes/default.css";
-import Axios from "axios";
 import axios from "axios";
 import { createPinia } from 'pinia'
 const app = createApp(App);

@@ -13,7 +13,6 @@
       >
       </el-progress>
     </div>
-    <el-button @click="changeProgress">changeProgress</el-button>
   </div>
 </template>
 
@@ -23,7 +22,7 @@ import {ElNotification} from "element-plus";
 
 const progress =
     {
-      percent: ref(0),
+      percent: ref(50),
       status: ref("success")
     }
 // watch() 默认是懒侦听的，即仅在侦听源发生变化时才执行回调函数
