@@ -25,6 +25,7 @@
             :data="tableData"
             @selection-change="handleSelectionChange"
             border
+            lazy
             style="width: 100%"
             v-loading="loading"
             @row-contextmenu="clickTableRow"
@@ -63,9 +64,11 @@
 // STORE
 import {useBucketsStore} from "@/Pinia/store/bucket";
 import {userightClickStore} from "@/Pinia/store/rightclick";
-import {getCurrentInstance, onMounted, ref, watch} from "vue";
+import {getCurrentInstance, onMounted, reactive, ref, watch} from "vue";
 import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import {storeToRefs} from "pinia";
+import axios from "axios";
+import qs from 'qs'
 
 const currentBucket = storeToRefs(useBucketsStore());
 const userRightClick = userightClickStore();
@@ -73,15 +76,20 @@ const userRightClick = userightClickStore();
 const {proxy} = getCurrentInstance();
 const loading = ref(true)
 const radio1 = ref('1')
-const tableData = ref([
-  {
-
-  }
-])
-
+let tableData = ref([])
+const reqData = {
+  path: "C:\\Users\\Administrator\\Documents\\WeChat Files\\wxid_2200162002311\\FileStorage\\File\\2022-12\\南整外2022年8月考勤.xls",
+  index: 0
+}
 // 渲染文件目录
 onMounted(() => {
   console.log("Main.vue ======= onMounted")
+
+  proxy.$axios.post("/api/readExcel/totleAttendence/", qs.stringify(reqData)).then((res: { data: any; }) => {
+    tableData.value = res.data.data;
+    console.log(tableData.value)
+  })
+
   loading.value = false;
 })
 watch(() => currentBucket.path.value,

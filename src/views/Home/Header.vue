@@ -37,57 +37,54 @@ let ipList = ref([''])
 
 // 获取ip
 onMounted(() => {
-  proxy.$axios.post('/getIPapi/.json/').then((res: any) => {
-    // console.log("res.data", res.data.address)
-    localIP.value = res.data.address;
-  })
+
 })
 
 
-const search = function () {
-  // 如果为空，打开搜索框。如果不为空，直接进行搜索
-  if (searchFor.value == '') {
-    ElMessageBox.prompt('', '搜索文件', {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
-    })
-        .then(({value}) => {
-          searchFor.value = value;
-          if (searchFor.value == null || value == null) {
-            ElMessage.error("无法搜索空文件夹")
-          } else {
-            ElMessage({
-              type: 'success',
-              message: `${value}`,
-            });
-            // 搜索
-            proxy.$axios({
-              method: 'post',
-              url: '/api/searchFiles',
-              params: {
-                path: currentBucket.path.value + currentBucket.fileTree,
-                name: searchFor.value,
-              }
-            }).then((res: any) => {
-              if (res.data.code == 200) {
-                // 获取成功
-                tableData.value = res.data.data;
-              } else {
-                ElMessage.error("未找到指定文件")
-              }
-            })
-          }
-        })
-        .catch(() => {
-          ElMessage({
-            type: 'info',
-            message: 'Input canceled',
-          })
-        })
-  } else {
-    proxy.$router.push('/');
-  }
-}
+// const search = function () {
+//   // 如果为空，打开搜索框。如果不为空，直接进行搜索
+//   if (searchFor.value == '') {
+//     ElMessageBox.prompt('', '搜索文件', {
+//       confirmButtonText: 'OK',
+//       cancelButtonText: 'Cancel',
+//     })
+//         .then(({value}) => {
+//           searchFor.value = value;
+//           if (searchFor.value == null || value == null) {
+//             ElMessage.error("无法搜索空文件夹")
+//           } else {
+//             ElMessage({
+//               type: 'success',
+//               message: `${value}`,
+//             });
+//             // 搜索
+//             proxy.$axios({
+//               method: 'post',
+//               url: '/api/searchFiles',
+//               params: {
+//                 path: currentBucket.path.value + currentBucket.fileTree,
+//                 name: searchFor.value,
+//               }
+//             }).then((res: any) => {
+//               if (res.data.code == 200) {
+//                 // 获取成功
+//                 tableData.value = res.data.data;
+//               } else {
+//                 ElMessage.error("未找到指定文件")
+//               }
+//             })
+//           }
+//         })
+//         .catch(() => {
+//           ElMessage({
+//             type: 'info',
+//             message: 'Input canceled',
+//           })
+//         })
+//   } else {
+//     proxy.$router.push('/');
+//   }
+// }
 
 //发送创建桶请求
 interface requestBody {

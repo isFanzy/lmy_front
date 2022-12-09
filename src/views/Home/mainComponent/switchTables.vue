@@ -8,7 +8,7 @@
           v-model="leftValue"
           style="text-align: left; display: inline-block"
           filterable
-          :left-default-checked="[2, 3]"
+          :left-default-checked="[]"
           :right-default-checked="[]"
           :render-content="renderFunc"
           :titles="['部门表', '总表']"
@@ -32,8 +32,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import type { VNode, VNodeProps } from 'vue'
+import {getCurrentInstance, onMounted, reactive, ref} from 'vue'
+import type {VNode, VNodeProps} from 'vue'
+
+const {proxy} = getCurrentInstance()
+const data: Option[] = reactive([])
 
 interface Option {
   key: number
@@ -41,19 +44,15 @@ interface Option {
   disabled: boolean
 }
 
-const generateData = (): Option[] => {
-  const data: Option[] = []
-  for (let i = 1; i <= 15; i++) {
-    data.push({
-      key: i,
-      label: `部门 ${i}`,
-      disabled: i % 4 === 0,
-    })
-  }
-  return data
-}
+onMounted(() => {
+  proxy.$axios.get("/api/readExcel/showAllOthers").then((res: any) => {
+    const d = res.data.data;
+    for (let i = 0; i < d.length; i++) {
+      data.push({key:i,label:d[i].tableName,disabled:false})
+    }
+  })
+})
 
-const data = ref(generateData())
 const rightValue = ref([1])
 const leftValue = ref([1])
 
@@ -73,9 +72,10 @@ const handleChange = (
 </script>
 
 <style scoped>
-div{
+div {
   border: 1px solid red;
 }
+
 .transfer-footer {
   margin-left: 15px;
   padding: 6px 5px;

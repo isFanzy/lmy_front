@@ -3,7 +3,7 @@ module.exports = {
         port: 8080, // 端口
         proxy: {
             '/api': {
-                target: 'http://localhost:10086/',
+                target: 'http://localhost:10086/api',
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {

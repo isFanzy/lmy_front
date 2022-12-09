@@ -8,11 +8,13 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",
+    "af-table-column": "^1.0.3",
     "amfe-flexible": "^2.2.1",
     "axios": "^0.27.2",
     "element-plus": "^1.1.0-beta.24",
     "mockjs": "^1.1.0",
     "pinia": "^2.0.21",
+    "qs": "^6.11.0",
     "register-service-worker": "^1.7.2",
     "v-contextmenu": "^3.0.0",
     "vue": "^3.2.13",

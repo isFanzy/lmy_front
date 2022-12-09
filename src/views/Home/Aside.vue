@@ -3,7 +3,7 @@
     <el-col :span="24">
       <h2 class="mb-2" :aria-disabled="true" style="margin-left:10px">功能列表</h2>
       <el-menu
-          default-active="2"
+          default-active="3"
           class="el-menu-vertical-demo"
           @select="handleSelect"
       >
@@ -67,7 +67,7 @@ const handleSelect = (key: string, keyPath: string[], item: any) => {
       console.log('e', asidelist.current.value);
       break;
     default:
-      asidelist.current.value = "scanFiles"
+      asidelist.current.value = "switchTables"
   }
 }
 

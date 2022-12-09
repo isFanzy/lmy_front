@@ -11,6 +11,8 @@ import axios from "axios";
 import { createPinia } from 'pinia'
 const app = createApp(App);
 const pinia  = createPinia();
+
+
 // @ts-ignore
 app.use(ElementPlus).use(router).use(contextmenu).use(pinia).mount('#app')
 app.config.globalProperties.$axios = axios;
